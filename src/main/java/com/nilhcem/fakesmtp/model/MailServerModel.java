@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.Validate;
+
 import com.nilhcem.fakesmtp.core.ServerConfiguration;
 import com.nilhcem.fakesmtp.core.exception.BindPortException;
 import com.nilhcem.fakesmtp.core.exception.InvalidHostException;
@@ -34,11 +36,24 @@ public class MailServerModel {
 	private int nbMessageReceived = 0;
 
 	private final Map<Integer, String> listMailsMap = new HashMap<Integer, String>();
-	private ServerConfiguration configuration;
-	private SMTPServerHandler server = new SMTPServerHandler(configuration);
 
-	MailServerModel(ServerConfiguration configuration) {
+	private ServerConfiguration configuration;
+	private final SMTPServerHandler server;
+
+	/**
+	 * Instantiates a new mail server model.
+	 *
+	 * @param configuration
+	 *            the configuration
+	 * @param _smtpServerHandler
+	 *            the smtp server handler
+	 */
+	public MailServerModel(ServerConfiguration configuration, SMTPServerHandler _smtpServerHandler) {
+		Validate.notNull(configuration);
+		Validate.notNull(_smtpServerHandler);
+
 		this.configuration = configuration;
+		server = _smtpServerHandler;
 	}
 
 	/**

@@ -4,12 +4,14 @@ import java.net.InetAddress;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.subethamail.smtp.AuthenticationHandlerFactory;
 import org.subethamail.smtp.helper.SimpleMessageListenerAdapter;
 import org.subethamail.smtp.server.SMTPServer;
 
 import com.nilhcem.fakesmtp.core.ServerConfiguration;
 import com.nilhcem.fakesmtp.core.exception.BindPortException;
 import com.nilhcem.fakesmtp.core.exception.OutOfRangePortException;
+import com.nilhcem.fakesmtp.model.MailServerModel;
 
 /**
  * Starts and stops the SMTP server.
@@ -21,25 +23,25 @@ public class SMTPServerHandler {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SMTPServerHandler.class);
 	private final MailSaver mailSaver;
-	private final MailListener myListener;
-	private final SMTPServer smtpServer ;
+	private final MailListener mailListener;
+	private final SMTPServer smtpServer;
+	private AuthenticationHandlerFactory smtpAuthHandlerFactory;
 
 	/**
 	 * Instantiates a new SMTP server handler.
 	 *
-	 * @param configuration
-	 *            the server configuration
+	 * @param mailServerModel the mail server model
+	 * @param _mailListener the mail listener
+	 * @param _mailSaver the mail saver
+	 * @param _smtpAuthHandlerFactory the smtp auth handler factory
 	 */
-	public SMTPServerHandler(ServerConfiguration configuration) {
-		if (configuration.memoryModeEnabled()) {
-			mailSaver = new MemoryMailSaver(configuration, configuration.getStorageCharset());
-		} else {
-			mailSaver = new DiskMailSaver(configuration, configuration.getStorageCharset());
-		}
+	public SMTPServerHandler(MailServerModel mailServerModel, MailListener _mailListener, MailSaver _mailSaver,
+			AuthenticationHandlerFactory _smtpAuthHandlerFactory) {
 
-		myListener = new MailListener(mailSaver);
-		smtpServer = new SMTPServer(new SimpleMessageListenerAdapter(myListener),
-				new SMTPAuthHandlerFactory());
+		mailListener = _mailListener;
+		mailSaver = _mailSaver;
+		smtpAuthHandlerFactory = _smtpAuthHandlerFactory;
+		smtpServer = new SMTPServer(new SimpleMessageListenerAdapter(mailListener), smtpAuthHandlerFactory);
 	}
 
 	/**

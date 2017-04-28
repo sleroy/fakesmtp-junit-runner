@@ -23,7 +23,7 @@ import com.nilhcem.fakesmtp.core.ServerConfiguration;
 import com.nilhcem.fakesmtp.model.EmailModel;
 import com.nilhcem.fakesmtp.model.MailServerModel;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * Saves emails and notifies components so they can refresh their views with new
  * data.

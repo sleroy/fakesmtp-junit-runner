@@ -5,20 +5,42 @@ import java.util.List;
 import org.subethamail.smtp.AuthenticationHandler;
 import org.subethamail.smtp.AuthenticationHandlerFactory;
 
+// TODO: Auto-generated Javadoc
 /**
  * The factory interface for creating authentication handlers.
  *
  * @author jasonpenny
  * @since 1.2
  */
-/*package*/ final class SMTPAuthHandlerFactory implements AuthenticationHandlerFactory {
+final class SMTPAuthHandlerFactory implements AuthenticationHandlerFactory {
+
+	/** The Constant LOGIN_MECHANISM. */
 	private static final String LOGIN_MECHANISM = "LOGIN";
 
-	@Override
-	public AuthenticationHandler create() {
-		return new SMTPAuthHandler();
+	/** The smtp auth handler. */
+	private AuthenticationHandler smtpAuthHandler;
+
+	/**
+	 * Instantiates a new SMTP auth handler factory.
+	 *
+	 * @param smtpAuthHandler the smtp auth handler
+	 */
+	public SMTPAuthHandlerFactory(AuthenticationHandler smtpAuthHandler) {
+		super();
+		this.smtpAuthHandler = smtpAuthHandler;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.subethamail.smtp.AuthenticationHandlerFactory#create()
+	 */
+	@Override
+	public AuthenticationHandler create() {
+		return smtpAuthHandler;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.subethamail.smtp.AuthenticationHandlerFactory#getAuthenticationMechanisms()
+	 */
 	@Override
 	public List<String> getAuthenticationMechanisms() {
 		List<String> result = new ArrayList<String>();

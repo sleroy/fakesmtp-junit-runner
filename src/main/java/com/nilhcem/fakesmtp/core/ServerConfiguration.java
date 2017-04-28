@@ -22,6 +22,7 @@ public class ServerConfiguration {
 	private String emailsSuffix;
 	private String storageCharsetName;
 	private String savePath;
+	private Authentication authentication = new Authentication();
 
 	/**
 	 * Handles command line arguments.
@@ -78,7 +79,6 @@ public class ServerConfiguration {
 	public String getPort() {
 		return port;
 	}
-
 
 	/**
 	 * Gets the storage charset to store the mails.
@@ -167,7 +167,6 @@ public class ServerConfiguration {
 		this.port = port;
 	}
 
-
 	public void setStartServerAtLaunch(boolean startServerAtLaunch) {
 		this.startServerAtLaunch = startServerAtLaunch;
 	}
@@ -211,6 +210,11 @@ public class ServerConfiguration {
 
 	public void setSavePath(String savePath) {
 		this.savePath = savePath;
+	}
+
+	public Authentication getAuthentication() {
+
+		return authentication;
 	}
 
 }
