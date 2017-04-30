@@ -1,20 +1,18 @@
 package com.nilhcem.fakesmtp.model;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 
-import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.nilhcem.fakesmtp.core.ServerConfiguration;
-import com.nilhcem.fakesmtp.core.exception.BindPortException;
-import com.nilhcem.fakesmtp.core.exception.InvalidHostException;
-import com.nilhcem.fakesmtp.core.exception.InvalidPortException;
-import com.nilhcem.fakesmtp.core.exception.OutOfRangePortException;
-
-import io.sleroy.junit.mail.server.SMTPServerHandler;
+import io.sleroy.junit.mail.server.events.DeleteAllMailEvent;
+import io.sleroy.junit.mail.server.events.NewMailEvent;
 
 /**
  * UI presentation model of the application.
@@ -28,106 +26,44 @@ import io.sleroy.junit.mail.server.SMTPServerHandler;
  * @see <a href="link">http://martinfowler.com/eaaDev/PresentationModel.html</a>
  * @since 1.0
  */
-public class MailServerModel {
+public class MailServerModel implements Observer {
 
-	private boolean started = false; // server is not started by default
-	private String portStr;
-	private String hostStr;
+	private static final Logger LOGGER = LoggerFactory.getLogger(MailServerModel.class);
+
+	/** The nb message received. */
 	private int nbMessageReceived = 0;
 
-	private final Map<Integer, String> listMailsMap = new HashMap<Integer, String>();
+	/** The list mails map. */
+	private final Map<Integer, String> listMailsMap = new HashMap<>();
 
-	private ServerConfiguration configuration;
-	private final SMTPServerHandler server;
+	/** The relay domains. */
+	private List<String> relayDomains = Collections.emptyList();
+
+	private List<EmailModel> emailModels = new ArrayList<>(100);
 
 	/**
 	 * Instantiates a new mail server model.
-	 *
-	 * @param configuration
-	 *            the configuration
-	 * @param _smtpServerHandler
-	 *            the smtp server handler
 	 */
-	public MailServerModel(ServerConfiguration configuration, SMTPServerHandler _smtpServerHandler) {
-		Validate.notNull(configuration);
-		Validate.notNull(_smtpServerHandler);
-
-		this.configuration = configuration;
-		server = _smtpServerHandler;
+	public MailServerModel() {
+		super();
 	}
 
 	/**
-	 * Happens when a user clicks on the start button.
-	 * <p>
-	 * This method will notify the {@code SMTPServerHandler} to start the
-	 * server.
-	 * </p>
+	 * Gets the list mails map.
 	 *
-	 * @throws InvalidPortException
-	 *             when the port is invalid.
-	 * @throws BindPortException
-	 *             when the port cannot be bound.
-	 * @throws OutOfRangePortException
-	 *             when the port is out of range.
-	 * @throws InvalidHostException
-	 *             when the address cannot be resolved.
-	 * @throws RuntimeException
-	 *             when an unknown exception happened.
+	 * @return the list mails map
 	 */
-	public void toggleButton()
-			throws BindPortException, OutOfRangePortException, InvalidPortException, InvalidHostException {
-		if (started) {
-			// Do nothing. We can't stop the server. User has to quit the app
-			// (issue with SubethaSMTP)
-		} else {
-			try {
-				int port = Integer.parseInt(portStr);
-				InetAddress host = null;
-				if (hostStr != null && !hostStr.isEmpty()) {
-					host = InetAddress.getByName(hostStr);
-				}
-
-				server.startServer(port, host);
-			} catch (NumberFormatException e) {
-				throw new InvalidPortException(e);
-			} catch (UnknownHostException e) {
-				throw new InvalidHostException(e, hostStr);
-			}
-		}
-		started = !started;
-	}
-
-	/**
-	 * Returns {@code true} if the server is started.
-	 *
-	 * @return {@code true} if the server is started.
-	 */
-	public boolean isStarted() {
-		return started;
-	}
-
-	public void setPort(String port) {
-		this.portStr = port;
-	}
-
-	public void setHost(String host) {
-		this.hostStr = host;
-	}
-
-	public int getNbMessageReceived() {
-		return nbMessageReceived;
-	}
-
-	public void setNbMessageReceived(int nbMessageReceived) {
-		this.nbMessageReceived = nbMessageReceived;
-	}
-
 	public Map<Integer, String> getListMailsMap() {
 		return listMailsMap;
 	}
 
-	public void setRelayDomains(List<String> relayDomains) {
-		this.relayDomains = relayDomains;
+	/**
+	 * Gets the nb message received.
+	 *
+	 * @return the nb message received
+	 */
+	public int getNbMessageReceived() {
+		return nbMessageReceived;
 	}
 
 	/**
@@ -139,20 +75,67 @@ public class MailServerModel {
 		return relayDomains;
 	}
 
-	private List<String> relayDomains;
-
-	public String getSavePath() {
-
-		return configuration.getSavePath();
+	/**
+	 * Sets the nb message received.
+	 *
+	 * @param nbMessageReceived
+	 *            the new nb message received
+	 */
+	public void setNbMessageReceived(int nbMessageReceived) {
+		this.nbMessageReceived = nbMessageReceived;
 	}
 
 	/**
-	 * Gets the emails suffix.
+	 * Sets the relay domains.
 	 *
-	 * @return the emails suffix
+	 * @param relayDomains
+	 *            the new relay domains
 	 */
-	public String getEmailsSuffix() {
-		return configuration.getEmailsSuffix();
+	public void setRelayDomains(List<String> relayDomains) {
+		this.relayDomains = relayDomains;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
+	@Override
+	public void update(Observable o, Object arg) {
+		if (arg instanceof NewMailEvent) {
+			saveMail(((NewMailEvent) arg).getModel());
+		} else if (arg instanceof DeleteAllMailEvent) {
+			deletAllMails();
+		}
+
+	}
+
+	protected void deletAllMails() {
+		LOGGER.info("Received event to delete all the mails");
+		this.emailModels.clear();
+	}
+
+	protected void saveMail(EmailModel arg) {
+		LOGGER.info("Has received mail : {}", arg);
+		this.emailModels.add(arg);
+	}
+
+	/**
+	 * Gets the email models.
+	 *
+	 * @return the email models
+	 */
+	@Override
+	public String toString() {
+		return "MailServerModel [nbMessageReceived=" + nbMessageReceived + ", listMailsMap=" + listMailsMap
+				+ ", relayDomains=" + relayDomains + ", emailModels=" + emailModels + "]";
+	}
+
+	/**
+	 * Gets the email models.
+	 *
+	 * @return the email models
+	 */
+	public List<EmailModel> getEmailModels() {
+		return emailModels;
 	}
 
 }

@@ -15,7 +15,7 @@ import org.subethamail.smtp.AuthenticationHandlerFactory;
 final class SMTPAuthHandlerFactory implements AuthenticationHandlerFactory {
 
 	/** The Constant LOGIN_MECHANISM. */
-	private static final String LOGIN_MECHANISM = "LOGIN";
+	public static final String LOGIN_MECHANISM = "LOGIN";
 
 	/** The smtp auth handler. */
 	private AuthenticationHandler smtpAuthHandler;
@@ -23,14 +23,17 @@ final class SMTPAuthHandlerFactory implements AuthenticationHandlerFactory {
 	/**
 	 * Instantiates a new SMTP auth handler factory.
 	 *
-	 * @param smtpAuthHandler the smtp auth handler
+	 * @param smtpAuthHandler
+	 *            the smtp auth handler
 	 */
 	public SMTPAuthHandlerFactory(AuthenticationHandler smtpAuthHandler) {
 		super();
 		this.smtpAuthHandler = smtpAuthHandler;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see org.subethamail.smtp.AuthenticationHandlerFactory#create()
 	 */
 	@Override
@@ -38,8 +41,11 @@ final class SMTPAuthHandlerFactory implements AuthenticationHandlerFactory {
 		return smtpAuthHandler;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.subethamail.smtp.AuthenticationHandlerFactory#getAuthenticationMechanisms()
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.subethamail.smtp.AuthenticationHandlerFactory#
+	 * getAuthenticationMechanisms()
 	 */
 	@Override
 	public List<String> getAuthenticationMechanisms() {

@@ -23,6 +23,8 @@ import com.nilhcem.fakesmtp.core.ServerConfiguration;
 import com.nilhcem.fakesmtp.model.EmailModel;
 import com.nilhcem.fakesmtp.model.MailServerModel;
 
+import io.sleroy.junit.mail.server.events.DeleteAllMailEvent;
+import io.sleroy.junit.mail.server.events.NewMailEvent;
 
 /**
  * Saves emails and notifies components so they can refresh their views with new
@@ -31,7 +33,7 @@ import com.nilhcem.fakesmtp.model.MailServerModel;
  * @author Nilhcem
  * @since 1.0
  */
-public abstract class MailSaver extends Observable {
+public final class MailSaver extends Observable {
 
 	/** The mail server model. */
 	protected MailServerModel mailServerModel;
@@ -41,8 +43,10 @@ public abstract class MailSaver extends Observable {
 	/**
 	 * Instantiates a new mail saver.
 	 *
-	 * @param mailServerModel the mail server model
-	 * @param _storageCharSet the storage char set
+	 * @param mailServerModel
+	 *            the mail server model
+	 * @param _storageCharSet
+	 *            the storage char set
 	 */
 	public MailSaver(MailServerModel mailServerModel, Charset _storageCharSet) {
 		this.mailServerModel = mailServerModel;
@@ -78,20 +82,8 @@ public abstract class MailSaver extends Observable {
 	public void saveEmailAndNotify(String from, String to, InputStream data) {
 		List<String> relayDomains = mailServerModel.getRelayDomains();
 
-		if (relayDomains != null) {
-			boolean matches = false;
-			for (String domain : relayDomains) {
-				if (to.endsWith(domain)) {
-					matches = true;
-					break;
-				}
-			}
-
-			if (!matches) {
-				LOGGER.debug("Destination {} doesn't match relay domains", to);
-				return;
-			}
-		}
+		if (!isMatchingRelayDomains(to, relayDomains))
+			return;
 
 		// We move everything that we can move outside the synchronized block to
 		// limit the impact
@@ -103,20 +95,45 @@ public abstract class MailSaver extends Observable {
 		model.setEmailStr(mailContent);
 
 		synchronized (getLock()) {
-			String filePath = saveEmailToFile(mailContent);
 
 			model.setReceivedDate(new Date());
-			model.setFilePath(filePath);
 
 			setChanged();
-			notifyObservers(model);
+
+			notifyObservers(new NewMailEvent(model));
 		}
 	}
 
 	/**
-	 * Deletes all received emails from file system.
+	 * Checks if is matching relay domains.
+	 *
+	 * @param to
+	 *            the to
+	 * @param relayDomains
+	 *            the relay domains
+	 * @return true, if is matching relay domains
 	 */
-	public abstract void deleteEmails() ;
+	private boolean isMatchingRelayDomains(String to, List<String> relayDomains) {
+		if (relayDomains != null) {
+			LOGGER.debug("Relay domains are defined : ", relayDomains);
+			boolean matches = false;
+			for (String domain : relayDomains) {
+				if (to.endsWith(domain)) {
+					LOGGER.debug("The domain is matching : ", domain);
+					matches = true;
+					break;
+				}
+			}
+
+			if (!matches) {
+				LOGGER.debug("Destination {} doesn't match relay domains", to);
+				return false;
+			}
+		} else {
+			LOGGER.debug("No relay domain has been defined, no filtering");
+		}
+		return true;
+	}
 
 	/**
 	 * Returns a lock object.
@@ -164,14 +181,6 @@ public abstract class MailSaver extends Observable {
 		return sb.toString();
 	}
 
-	/**
-	 * Saves the content of the email passed in parameters in a file.
-	 *
-	 * @param mailContent
-	 *            the content of the email to be saved.
-	 * @return the path of the created file.
-	 */
-	protected abstract String saveEmailToFile(String mailContent);
 	/**
 	 * Gets the subject from the email data passed in parameters.
 	 *

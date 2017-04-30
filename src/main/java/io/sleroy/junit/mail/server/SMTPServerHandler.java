@@ -5,10 +5,10 @@ import java.net.InetAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.smtp.AuthenticationHandlerFactory;
+import org.subethamail.smtp.helper.SimpleMessageListener;
 import org.subethamail.smtp.helper.SimpleMessageListenerAdapter;
 import org.subethamail.smtp.server.SMTPServer;
 
-import com.nilhcem.fakesmtp.core.ServerConfiguration;
 import com.nilhcem.fakesmtp.core.exception.BindPortException;
 import com.nilhcem.fakesmtp.core.exception.OutOfRangePortException;
 import com.nilhcem.fakesmtp.model.MailServerModel;
@@ -23,19 +23,23 @@ public class SMTPServerHandler {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SMTPServerHandler.class);
 	private final MailSaver mailSaver;
-	private final MailListener mailListener;
+	private final SimpleMessageListener mailListener;
 	private final SMTPServer smtpServer;
 	private AuthenticationHandlerFactory smtpAuthHandlerFactory;
 
 	/**
 	 * Instantiates a new SMTP server handler.
 	 *
-	 * @param mailServerModel the mail server model
-	 * @param _mailListener the mail listener
-	 * @param _mailSaver the mail saver
-	 * @param _smtpAuthHandlerFactory the smtp auth handler factory
+	 * @param mailServerModel
+	 *            the mail server model
+	 * @param _mailListener
+	 *            the mail listener
+	 * @param _mailSaver
+	 *            the mail saver
+	 * @param _smtpAuthHandlerFactory
+	 *            the smtp auth handler factory
 	 */
-	public SMTPServerHandler(MailServerModel mailServerModel, MailListener _mailListener, MailSaver _mailSaver,
+	public SMTPServerHandler(MailServerModel mailServerModel, SimpleMessageListener _mailListener, MailSaver _mailSaver,
 			AuthenticationHandlerFactory _smtpAuthHandlerFactory) {
 
 		mailListener = _mailListener;
@@ -96,20 +100,11 @@ public class SMTPServerHandler {
 	}
 
 	/**
-	 * Returns the {@code MailSaver} object.
+	 * Checks whether the server is running
 	 *
-	 * @return the {@code MailSaver} object.
+	 * @return true, whether the server is running
 	 */
-	public MailSaver getMailSaver() {
-		return mailSaver;
-	}
-
-	/**
-	 * Returns the {@code SMTPServer} object.
-	 *
-	 * @return the {@code SMTPServer} object.
-	 */
-	public SMTPServer getSmtpServer() {
-		return smtpServer;
+	public boolean isRunning() {
+		return smtpServer.isRunning();
 	}
 }

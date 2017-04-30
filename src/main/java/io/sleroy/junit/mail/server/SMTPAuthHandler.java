@@ -10,7 +10,7 @@ import org.subethamail.smtp.AuthenticationHandler;
  * @since 1.2
  */
 final class SMTPAuthHandler implements AuthenticationHandler {
-	private static final String USER_IDENTITY = "User";
+	public static final String USER_IDENTITY = "User";
 
 	private int pass = 0;
 
