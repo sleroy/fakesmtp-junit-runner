@@ -16,18 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.nilhcem.fakesmtp.core.exception;
+package io.sleroy.junit.mail.server;
 
-/**
- * Thrown if the SMTP port is out of range while trying to start the server.
- *
- * @author Nilhcem
- * @since 1.0
- */
-public final class OutOfRangePortException extends AbstractPortException {
-	private static final long serialVersionUID = -8357518994968551990L;
+import java.io.InputStream;
 
-	public OutOfRangePortException(Exception e, int port) {
-		super(e, port);
-	}
+@FunctionalInterface
+public interface MailSaverInterface {
+
+	/**
+	 * Saves incoming email in file system and notifies observers.
+	 *
+	 * @param from
+	 *            the user who send the email.
+	 * @param to
+	 *            the recipient of the email.
+	 * @param data
+	 *            an InputStream object containing the email.
+	 * @see com.nilhcem.fakesmtp.gui.MainPanel#addObservers to see which
+	 *      observers will be notified
+	 */
+	void saveEmailAndNotify(String from, String to, InputStream data);
+
 }

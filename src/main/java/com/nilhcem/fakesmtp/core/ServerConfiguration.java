@@ -1,9 +1,30 @@
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 
 package com.nilhcem.fakesmtp.core;
 
 import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
 /**
  * Handles command line arguments.
  *
@@ -12,25 +33,85 @@ import java.util.List;
  */
 public class ServerConfiguration {
 
+	/**
+	 * Creates the server configuration.
+	 *
+	 * @return the server configuration
+	 */
+	public static ServerConfiguration create() {
+		return new ServerConfiguration();
+	}
+
+	/** The port. */
 	private String port = "25";
+
+	/** The bind address. */
 	private String bindAddress;
-	private String outputDirectory;
-	private String emlViewer;
-	private boolean backgroundStart;
-	private boolean startServerAtLaunch;
-	private boolean memoryModeEnabled;
-	private String emailsSuffix;
-	private String storageCharsetName;
-	private String savePath;
+
+	/** The storage charset name. */
+	private String storageCharsetName = Charset.defaultCharset().name();
+
+	/** The authentication. */
 	private Authentication authentication = new Authentication();
+
+	private List<String> relayDomains = Collections.emptyList();
 
 	/**
 	 * Handles command line arguments.
 	 */
-	ServerConfiguration() {
+	public ServerConfiguration() {
+		super();
 	}
 
 	/**
+	 * Defines the authentication.
+	 *
+	 * @param authentication
+	 *            the authentication
+	 * @return the server configuration
+	 */
+	public ServerConfiguration auth(Authentication authentication) {
+		this.authentication = authentication;
+		return this;
+	}
+
+	/**
+	 * Sets the bind address.
+	 *
+	 * @param bindAddress
+	 *            the new bind address
+	 * @return the server configuration
+	 */
+	public ServerConfiguration bind(String bindAddress) {
+		this.bindAddress = bindAddress;
+		return this;
+	}
+
+	/**
+	 * Sets the storage charset name.
+	 *
+	 * @param storageCharset
+	 *            the new storage charset name
+	 * @return the server configuration
+	 */
+	public ServerConfiguration charset(String storageCharset) {
+		this.storageCharsetName = storageCharset;
+		return this;
+	}
+
+	/**
+	 * Gets the authentication.
+	 *
+	 * @return the authentication
+	 */
+	public Authentication getAuthentication() {
+
+		return authentication;
+	}
+
+	/**
+	 * Gets the bind address.
+	 *
 	 * @return the bind address, as specified by the user, or a {@code null}
 	 *         string if unspecified.
 	 */
@@ -39,45 +120,23 @@ public class ServerConfiguration {
 	}
 
 	/**
-	 * Gets the emails suffix.
+	 * Gets the port.
 	 *
-	 * @return the emails suffix
-	 */
-	public String getEmailsSuffix() {
-
-		return emailsSuffix;
-	}
-
-	/**
-	 * @return the name of executable used for viewing eml files, as specified
-	 *         by the user, or a {@code null} string if unspecified.
-	 */
-	public String getEmlViewer() {
-		return emlViewer;
-	}
-
-	/**
-	 * @return the file name of the program.
-	 */
-	private String getJarName() {
-		return new java.io.File(ServerConfiguration.class.getProtectionDomain().getCodeSource().getLocation().getPath())
-				.getName();
-	}
-
-	/**
-	 * @return the output directory, as specified by the user, or a {@code null}
-	 *         string if unspecified.
-	 */
-	public String getOutputDirectory() {
-		return outputDirectory;
-	}
-
-	/**
 	 * @return the port, as specified by the user, or a {@code null} string if
 	 *         unspecified.
 	 */
 	public String getPort() {
 		return port;
+	}
+
+	/**
+	 * Gets the relay domains.
+	 *
+	 * @return the relay domains
+	 */
+	public List<String> getRelayDomains() {
+
+		return relayDomains;
 	}
 
 	/**
@@ -95,66 +154,32 @@ public class ServerConfiguration {
 	 *
 	 * @return the storage charset
 	 */
-	public String getStorageCharSet() {
+	public String getStorageCharSetName() {
 		return storageCharsetName;
 	}
 
 	/**
-	 * @return whether or not the SMTP server should disable the persistence in
-	 *         order to avoid the overhead that it adds. This is particularly
-	 *         useful when we launch performance tests that massively send
-	 *         emails.
+	 * Defines the user name for the authentication.
+	 *
+	 * @param password
+	 *            the password
+	 * @return the server configuration
 	 */
-	public boolean memoryModeEnabled() {
-		return memoryModeEnabled;
+	public ServerConfiguration password(String password) {
+		this.authentication.setPassword(password);
+		return this;
 	}
 
 	/**
-	 * Sets the background start.
+	 * Defines the server's port.
 	 *
-	 * @param backgroundStart
-	 *            the new background start
+	 * @param port
+	 *            the port
+	 * @return the server configuration
 	 */
-	public void setBackgroundStart(boolean backgroundStart) {
-		this.backgroundStart = backgroundStart;
-	}
-
-	/**
-	 * Sets the bind address.
-	 *
-	 * @param bindAddress
-	 *            the new bind address
-	 */
-	public void setBindAddress(String bindAddress) {
-		this.bindAddress = bindAddress;
-	}
-
-	/**
-	 * Sets the emails suffix.
-	 *
-	 * @param emailsSuffix
-	 *            the new emails suffix
-	 */
-	public void setEmailsSuffix(String emailsSuffix) {
-		this.emailsSuffix = emailsSuffix;
-	}
-
-	public void setEmlViewer(String emlViewer) {
-		this.emlViewer = emlViewer;
-	}
-
-	/**
-	 * Sets the memory mode enabled.
-	 *
-	 * @param memoryModeEnabled
-	 *            the new memory mode enabled
-	 */
-	public void setMemoryModeEnabled(boolean memoryModeEnabled) {
-		this.memoryModeEnabled = memoryModeEnabled;
-	}
-
-	public void setOutputDirectory(String outputDirectory) {
-		this.outputDirectory = outputDirectory;
+	public ServerConfiguration port(int port) {
+		this.port = Integer.toString(port);
+		return this;
 	}
 
 	/**
@@ -162,59 +187,58 @@ public class ServerConfiguration {
 	 *
 	 * @param port
 	 *            the new port
+	 * @return the server configuration
 	 */
-	public void setPort(String port) {
+	public ServerConfiguration port(String port) {
 		this.port = port;
-	}
-
-	public void setStartServerAtLaunch(boolean startServerAtLaunch) {
-		this.startServerAtLaunch = startServerAtLaunch;
+		return this;
 	}
 
 	/**
-	 * Sets the storage charset name.
+	 * Sets the relay domains.
 	 *
-	 * @param storageCharset
-	 *            the new storage charset name
+	 * @param relayDomains
+	 *            the relay domains
+	 * @return
 	 */
-	public void setStorageCharsetName(String storageCharset) {
-		this.storageCharsetName = storageCharset;
+	public ServerConfiguration relayDomains(List<String> relayDomains) {
+		this.relayDomains = relayDomains;
+		return this;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "ServerConfiguration [port=" + port + ", bindAddress=" + bindAddress + ", storageCharsetName="
+				+ storageCharsetName + ", authentication=" + authentication + "]";
 	}
 
 	/**
-	 * @return whether or not the SMTP server must be running without a GUI,
-	 *         only if started at launch (if {@code shouldStartServerAtLaunch()}
-	 *         returns true}).
-	 * @see #shouldStartServerAtLaunch
-	 */
-	public boolean shouldStartInBackground() {
-		return startServerAtLaunch && backgroundStart;
-	}
-
-	/**
-	 * @return whether or not the SMTP server must be started automatically at
-	 *         launch.
-	 */
-	public boolean shouldStartServerAtLaunch() {
-		return startServerAtLaunch;
-	}
-
-	/**
-	 * Gets the save path to store the mails;
+	 * Defines the user name for the authentication.
 	 *
-	 * @return the save path
+	 * @param userName
+	 *            the user name
+	 * @return the server configuration
 	 */
-	public String getSavePath() {
-		return savePath;
+	public ServerConfiguration userName(String userName) {
+		this.authentication.setUserName(userName);
+		return this;
 	}
 
-	public void setSavePath(String savePath) {
-		this.savePath = savePath;
+	/**
+	 * Defines the relay domains. for this SMTP Server
+	 *
+	 * @param domains
+	 *            a list of relay domains
+	 * @return the server configuration
+	 */
+	public ServerConfiguration relayDomains(String... domains) {
+		this.relayDomains = Arrays.asList(domains);
+		return this;
+
 	}
-
-	public Authentication getAuthentication() {
-
-		return authentication;
-	}
-
 }

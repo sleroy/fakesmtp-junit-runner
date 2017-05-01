@@ -21,7 +21,9 @@ repositories {
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
-	compile group: 'org.subethamail', name: 'subethasmtp', version: '3.1.7'
+	compile ("org.subethamail:subethasmtp:3.1.7") {
+    	exclude group: 'org.slf4j' 
+    }
 	compile group: 'commons-io', name: 'commons-io', version: '2.5'
 	compile group: 'org.picocontainer', name: 'picocontainer', version: '2.15'
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
@@ -36,5 +38,10 @@ dependencies {
 
 	testCompile "junit:junit:$JUNIT_VERSION"
 	testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+
+	testCompile group: 'javax.mail', name: 'javax.mail-api', version: JAVAX_MAIL_API
+	testCompile group: 'javax.mail', name: 'mail', version: JAVAX_MAIL
+	testCompile group: 'com.sun.mail', name: 'javax.mail', version: JAVAX_MAIL_API
+	testCompile "com.github.nithril:smtp-connection-pool:1.2.1"
 }
 

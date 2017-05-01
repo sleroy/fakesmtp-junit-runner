@@ -16,18 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.nilhcem.fakesmtp.core.exception;
+package io.sleroy.junit.mail.server.events;
+
+import com.nilhcem.fakesmtp.model.EmailModel;
 
 /**
- * Thrown if the SMTP port is out of range while trying to start the server.
- *
- * @author Nilhcem
- * @since 1.0
+ * The Class {@link RejectedMailEvent} defines an event when an email model has
+ * been rejected.
  */
-public final class OutOfRangePortException extends AbstractPortException {
-	private static final long serialVersionUID = -8357518994968551990L;
+public class RejectedMailEvent {
 
-	public OutOfRangePortException(Exception e, int port) {
-		super(e, port);
+	private EmailModel model;
+
+	/**
+	 * Instantiates a new rejected mail event.
+	 *
+	 * @param model
+	 *            the model
+	 */
+	public RejectedMailEvent(EmailModel model) {
+		this.model = model;
+
 	}
+
+	public EmailModel getModel() {
+		return model;
+	}
+
 }

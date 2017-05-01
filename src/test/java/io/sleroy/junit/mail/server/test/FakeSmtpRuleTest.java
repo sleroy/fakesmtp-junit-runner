@@ -16,38 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.sleroy.junit.mail.server;
+package io.sleroy.junit.mail.server.test;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
 
-import io.sleroy.junit.mail.server.SMTPAuthHandler;
+import com.nilhcem.fakesmtp.core.ServerConfiguration;
 
-@RunWith(MockitoJUnitRunner.class)
-public class SMTPAuthHandlerTest {
-	private String password = "password";
-	private String userName = "username";
+public class FakeSmtpRuleTest {
 
-	private SMTPAuthHandler SMTPAuthHandler = new SMTPAuthHandler(userName, password);
+	@Rule
+	public FakeSmtpRule smtpServer = new FakeSmtpRule(ServerConfiguration.create().port(2525).charset("UTF-8"));
 
+	/**
+	 * Tests that the server is launching
+	 */
 	@Test
-	public void testAuth() throws Exception {
-		Assert.assertEquals(userName, SMTPAuthHandler.auth(""));
-		Assert.assertEquals(password, SMTPAuthHandler.auth(""));
-		Assert.assertNull(SMTPAuthHandler.auth(""));
-
-
-	}
-
-	@Test
-	public void testGetIdentity() throws Exception {
-		Object identity = SMTPAuthHandler.getIdentity();
-
-		Assert.assertEquals(SMTPAuthHandler.USER_IDENTITY, identity);
+	public void testFakeSmtpRule() {
+		Assert.assertTrue(smtpServer.isRunning());
 	}
 
 }
