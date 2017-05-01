@@ -55,7 +55,7 @@ public class FakeSmtpIntegrationTest {
 	 * @throws MessagingException
 	 */
 	@Test
-	public void testMailSending() throws MessagingException {
+	public void testMailSending_withoutRelay() throws MessagingException {
 		// GIVEN A MAIL SERVER WITHOUT RELAY DOMAIN
 		// THEN I SEND A MAIL
 		mailSender.sendMail("sender@example.org", "receiver@example.org");
@@ -64,6 +64,25 @@ public class FakeSmtpIntegrationTest {
 		Assert.assertTrue(smtpServer.mailBox().isEmpty());
 		// AND A MAIL HAS BEEN REJECTED
 		Assert.assertEquals(1, smtpServer.rejectedMails().size());
+	}
+
+
+	/**
+	 * Sends a mail and controls that it has been treated.
+	 * 
+	 * @throws MessagingException
+	 */
+	@Test
+	public void testMailSending_withRelay() throws MessagingException {
+		// GIVEN A MAIL SERVER WITH RELAY DOMAIN
+		smtpServer.getServerConfiguration().relayDomains("example.org");
+		// THEN I SEND A MAIL
+		mailSender.sendMail("sender@example.org", "receiver@example.org");
+
+		// I HAVE ONE MAIL IN MY MAILBOX
+		Assert.assertEquals(1, smtpServer.mailBox(). size());
+		// AND NO MAIL HAS BEEN REJECTED
+		Assert.assertEquals(0, smtpServer.rejectedMails().size());
 	}
 
 }

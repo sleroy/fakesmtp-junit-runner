@@ -27,6 +27,7 @@ import com.nilhcem.fakesmtp.model.EmailModel;
 
 import io.sleroy.junit.mail.server.MailServer;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class FakeSmtpRule defines a JUnit Rule to start/stop a SMTP Server. It
  * can be useful to write integration tests with JavaMail libraries. The
@@ -34,20 +35,39 @@ import io.sleroy.junit.mail.server.MailServer;
  */
 public class FakeSmtpRule extends ExternalResource {
 
+	/** The server configuration. */
 	private ServerConfiguration serverConfiguration;
+
+	/** The mail server. */
 	private MailServer mailServer;
 
+	/**
+	 * Instantiates a new fake smtp rule.
+	 *
+	 * @param serverConfiguration
+	 *            the server configuration
+	 */
 	public FakeSmtpRule(ServerConfiguration serverConfiguration) {
 		super();
 		this.serverConfiguration = serverConfiguration;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.junit.rules.ExternalResource#before()
+	 */
 	@Override
 	protected void before() throws Throwable {
 		mailServer = new MailServer(serverConfiguration);
 		mailServer.start();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.junit.rules.ExternalResource#after()
+	 */
 	@Override
 	protected void after() {
 		super.after();
@@ -98,6 +118,15 @@ public class FakeSmtpRule extends ExternalResource {
 	 */
 	public List<EmailModel> rejectedMails() {
 		return mailServer.getRejectedMails();
+	}
+
+	/**
+	 * Gets the server configuration.
+	 *
+	 * @return the server configuration
+	 */
+	public ServerConfiguration getServerConfiguration() {
+		return serverConfiguration;
 	}
 
 }
