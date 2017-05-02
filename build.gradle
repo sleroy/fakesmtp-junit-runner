@@ -7,7 +7,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 
-if (project.hasProperty('ossrhUsername')) {
+if (!project.hasProperty('ossrhUsername')) {
     ossrhUsername="dumb"
     ossrhPassword="dumb"
 }
