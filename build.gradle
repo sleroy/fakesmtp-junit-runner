@@ -8,8 +8,8 @@ apply plugin: 'signing'
 
 
 if (!project.hasProperty('ossrhUsername')) {
-    ossrhUsername="dumb"
-    ossrhPassword="dumb"
+    ext.ossrhUsername="dumb"
+    ext.ossrhPassword="dumb"
 }
 
 def isDevBuild
