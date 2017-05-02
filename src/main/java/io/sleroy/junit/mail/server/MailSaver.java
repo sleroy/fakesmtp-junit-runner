@@ -72,8 +72,7 @@ public final class MailSaver extends Observable implements MailSaverInterface {
 	/**
 	 * Instantiates a new mail saver.
 	 *
-	 * @param mailServerModel
-	 *            the mail server model
+	 * @param serverConfiguration the server configuration
 	 */
 	public MailSaver(ServerConfiguration serverConfiguration) {
 

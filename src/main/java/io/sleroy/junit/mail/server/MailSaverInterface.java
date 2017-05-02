@@ -20,6 +20,8 @@ package io.sleroy.junit.mail.server;
 
 import java.io.InputStream;
 
+import com.nilhcem.fakesmtp.model.MailServerModel;
+
 @FunctionalInterface
 public interface MailSaverInterface {
 
@@ -32,7 +34,7 @@ public interface MailSaverInterface {
 	 *            the recipient of the email.
 	 * @param data
 	 *            an InputStream object containing the email.
-	 * @see com.nilhcem.fakesmtp.gui.MainPanel#addObservers to see which
+	 * @see MailServerModel to see which
 	 *      observers will be notified
 	 */
 	void saveEmailAndNotify(String from, String to, InputStream data);

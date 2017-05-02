@@ -199,7 +199,7 @@ public class ServerConfiguration {
 	 *
 	 * @param relayDomains
 	 *            the relay domains
-	 * @return
+	 * @return the server configuration
 	 */
 	public ServerConfiguration relayDomains(List<String> relayDomains) {
 		this.relayDomains = relayDomains;
