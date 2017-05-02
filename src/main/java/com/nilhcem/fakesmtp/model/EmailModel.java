@@ -29,6 +29,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
 /**
  * A model representing a received email.
  * <p>
@@ -43,66 +44,83 @@ import org.slf4j.LoggerFactory;
  */
 public final class EmailModel {
 
-	@Override
-	public String toString() {
-		return "EmailModel [receivedDate=" + receivedDate + ", from=" + from + ", to=" + to + ", subject=" + subject
-				+ ", emailStr=" + emailStr + ", filePath=" + filePath + "]";
-	}
-
+	/** The received date. */
 	private Date receivedDate;
+
+	/** The from. */
 	private String from;
+
+	/** The to. */
 	private String to;
+
+	/** The subject. */
 	private String subject;
+
+	/** The email str. */
 	private String emailStr;
+
+	/** The file path. */
 	private String filePath;
 
-	public Date getReceivedDate() {
-		return receivedDate;
+	/**
+	 * Instantiates a new email model.
+	 */
+	public EmailModel() {
+		super();
 	}
 
-	public void setReceivedDate(Date receivedDate) {
-		this.receivedDate = receivedDate;
-	}
-
-	public String getFrom() {
-		return from;
-	}
-
-	public void setFrom(String from) {
-		this.from = from;
-	}
-
-	public String getTo() {
-		return to;
-	}
-
-	public void setTo(String to) {
-		this.to = to;
-	}
-
-	public String getSubject() {
-		return subject;
-	}
-
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-
+	/**
+	 * Gets the email str.
+	 *
+	 * @return the email str
+	 */
 	public String getEmailStr() {
 		return emailStr;
 	}
 
-	public void setEmailStr(String emailStr) {
-		this.emailStr = emailStr;
-	}
-
+	/**
+	 * Gets the file path.
+	 *
+	 * @return the file path
+	 */
 	public String getFilePath() {
 		return filePath;
 	}
 
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
+	/**
+	 * Gets the from.
+	 *
+	 * @return the from
+	 */
+	public String getFrom() {
+		return from;
+	}
 
+	/**
+	 * Gets the received date.
+	 *
+	 * @return the received date
+	 */
+	public Date getReceivedDate() {
+		return receivedDate;
+	}
+
+	/**
+	 * Gets the subject.
+	 *
+	 * @return the subject
+	 */
+	public String getSubject() {
+		return subject;
+	}
+
+	/**
+	 * Gets the to.
+	 *
+	 * @return the to
+	 */
+	public String getTo() {
+		return to;
 	}
 
 	/**
@@ -111,13 +129,88 @@ public final class EmailModel {
 	 * The stream is not closed after the execution of the method. You need to
 	 * close it yourself.
 	 *
-	 * @param outputStream the output stream
-	 * @param charset the charset
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @param outputStream
+	 *            the output stream
+	 * @param charset
+	 *            the charset
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public void save(OutputStream outputStream, Charset charset) throws IOException {
 		// Copy String to file
 
 		IOUtils.write(this.emailStr, outputStream, charset);
+	}
+
+	/**
+	 * Sets the email str.
+	 *
+	 * @param emailStr
+	 *            the new email str
+	 */
+	public void setEmailStr(String emailStr) {
+		this.emailStr = emailStr;
+	}
+
+	/**
+	 * Sets the file path.
+	 *
+	 * @param filePath
+	 *            the new file path
+	 */
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+
+	}
+
+	/**
+	 * Sets the from.
+	 *
+	 * @param from
+	 *            the new from
+	 */
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	/**
+	 * Sets the received date.
+	 *
+	 * @param receivedDate
+	 *            the new received date
+	 */
+	public void setReceivedDate(Date receivedDate) {
+		this.receivedDate = receivedDate;
+	}
+
+	/**
+	 * Sets the subject.
+	 *
+	 * @param subject
+	 *            the new subject
+	 */
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	/**
+	 * Sets the to.
+	 *
+	 * @param to
+	 *            the new to
+	 */
+	public void setTo(String to) {
+		this.to = to;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "EmailModel [receivedDate=" + receivedDate + ", from=" + from + ", to=" + to + ", subject=" + subject
+				+ ", emailStr=" + emailStr + ", filePath=" + filePath + "]";
 	}
 }

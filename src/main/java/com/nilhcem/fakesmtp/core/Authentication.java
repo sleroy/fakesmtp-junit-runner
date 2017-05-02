@@ -18,11 +18,17 @@
  */
 package com.nilhcem.fakesmtp.core;
 
-
 /**
  * The Class Authentication defines the configuration for the SMTPAuthHandler.
  */
 public class Authentication {
+
+	/**
+	 * Instantiates a new authentication.
+	 */
+	public Authentication() {
+		super();
+	}
 
 	/** The user name. */
 	private String userName;
@@ -53,7 +59,8 @@ public class Authentication {
 	/**
 	 * Sets the password.
 	 *
-	 * @param password the new password
+	 * @param password
+	 *            the new password
 	 */
 	public void setPassword(String password) {
 		this.password = password;
@@ -62,13 +69,16 @@ public class Authentication {
 	/**
 	 * Sets the user name.
 	 *
-	 * @param userName the new user name
+	 * @param userName
+	 *            the new user name
 	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

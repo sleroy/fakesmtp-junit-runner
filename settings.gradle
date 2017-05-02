@@ -17,4 +17,3 @@ include 'services:webservice'
 */
 
 rootProject.name = 'fakesmtp-junit-runner'
-
