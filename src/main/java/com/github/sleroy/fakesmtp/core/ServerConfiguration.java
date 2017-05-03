@@ -201,7 +201,7 @@ public class ServerConfiguration {
 	 *            the relay domains
 	 * @return the server configuration
 	 */
-	public ServerConfiguration relayDomains(List<String> relayDomains) {
+	public ServerConfiguration relayDomainsList(List<String> relayDomains) {
 		this.relayDomains = relayDomains;
 		return this;
 	}

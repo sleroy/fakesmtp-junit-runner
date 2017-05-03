@@ -26,7 +26,7 @@ import com.github.sleroy.fakesmtp.core.ServerConfiguration;
 import com.github.sleroy.fakesmtp.model.EmailModel;
 import com.github.sleroy.junit.mail.server.MailServer;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class FakeSmtpRule defines a JUnit Rule to start/stop a SMTP Server. It
  * can be useful to write integration tests with JavaMail libraries. The
