@@ -4,7 +4,7 @@
 
 [![Coverage Status](https://coveralls.io/repos/sleroy/fakesmtp-junit-runner/badge.svg?branch=master&service=github)](https://coveralls.io/github/sleroy/fakesmtp-junit-runner?branch=master)
 
-Important : Part of the source code of this library has been modified and adapted from the project of [FakeSmtp](https://github.com/Nilhcem/FakeSMTP). I want to thank him since his project inspired me the creation of that library.
+**Important** : Part of the source code of this library has been modified and adapted from the project of [FakeSmtp](https://github.com/Nilhcem/FakeSMTP). I want to thank him since his project inspired me the creation of that library.
 
 This library is an extension to JUnit to allow developers to write integration tests where a SMTP server is required.
 
@@ -16,7 +16,7 @@ The how-to is quite simple :
 * You can control the mailbox 
 * Write your own assertions to check mails.
 
-## Installation
+## Installation
 
 To use it, adds the library to your maven or gradle config script :
 
