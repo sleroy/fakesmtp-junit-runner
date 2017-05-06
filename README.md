@@ -2,13 +2,11 @@
 
 [![Build Status](https://travis-ci.org/sleroy/fakesmtp-junit-runner.svg?branch=master)](https://travis-ci.org/sleroy/fakesmtp-junit-runner)
 
+Important : Part of the source code of this library has been modified and adapted from the project of [FakeSmtp](https://github.com/Nilhcem/FakeSMTP). I want to thank him since his project inspired me the creation of that library.
 
-This module is an extension to JUnit to help developers to write integration tests of their mail services inside Java webapps.
+This library is an extension to JUnit to allow developers to write integration tests where a SMTP server is required.
 
-Basically, it's a JUnit Rule (@Rule). 
-
-The idea is :
-
+The how-to is quite simple :
 
 * Inserts the @Rule in your integration tests
 * a Fake SMTP Server will start
@@ -16,6 +14,83 @@ The idea is :
 * You can control the mailbox 
 * Write your owyn assertions to check mails.
 
-To use it :
+## Installation
 
+To use it, adds the library to your maven or gradle config script :
+
+**For maven :**
+
+```
+<dependency>
+  <groupId>com.github.sleroy</groupId>
+  <artifactId>fakesmtp-junit-runner</artifactId>
+  <version>0.1.0</version>
+  <scope>test</scope>
+</dependency>
+```
+
+**For gradle :**
+
+```
+testCompile "com.github.sleroy:fakesmtp-junit-runner:0.1.0"
+```
+
+## Usage
+
+**Step 1 :**
+
+Creates a JUnit test :
+
+```
+public class SmtpSendingClassTest {
+
+
+  @Test
+  public void testCase1() {
+
+  }
+
+}
+```
+
+**Step 2 :**
+
+Adds the new Junit rule with its configuration :
+
+```
+public class SmtpSendingClassTest {
+
+  @Rule
+	public FakeSmtpRule smtpServer = new FakeSmtpRule(ServerConfiguration.create().port(2525).charset("UTF-8"));
+
+  @Test
+  public void testCase1() {
+
+  }
+
+}
+```
+
+**Step 3 :**
+
+You are ready to use it, controls the mailbox or the server state :
+
+```
+Assert.assertTrue(smtpServer.isRunning());
+```
+
+```
+public class SmtpSendingClassTest {
+
+  @Rule
+	public FakeSmtpRule smtpServer = new FakeSmtpRule(ServerConfiguration.create().port(2525).charset("UTF-8"));
+
+  @Test
+  public void testCase1() {
+    Assert.assertTrue(smtpServer.isRunning());
+    Assert.assertTrue(smtpServer.mailbox().isEmpty());
+  }
+
+}
+```
 
