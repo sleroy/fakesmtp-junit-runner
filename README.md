@@ -18,6 +18,8 @@ The how-to is quite simple :
 
 ## Installation
 
+The project requires JUnit 4.11 or higher. It also requires SLF4J API presents in the classpath. I did not bundle them in the library to avoid conflicts.
+
 To use it, adds the library to your maven or gradle config script :
 
 **For maven :**
