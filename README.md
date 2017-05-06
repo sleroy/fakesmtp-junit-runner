@@ -28,7 +28,7 @@ To use it, adds the library to your maven or gradle config script :
 <dependency>
   <groupId>com.github.sleroy</groupId>
   <artifactId>fakesmtp-junit-runner</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -36,7 +36,7 @@ To use it, adds the library to your maven or gradle config script :
 **For gradle :**
 
 ```
-testCompile "com.github.sleroy:fakesmtp-junit-runner:0.1.0"
+testCompile "com.github.sleroy:fakesmtp-junit-runner:0.1.1"
 ```
 
 ## Usage
