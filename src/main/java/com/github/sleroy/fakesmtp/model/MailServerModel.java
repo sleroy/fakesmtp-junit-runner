@@ -32,9 +32,6 @@ public class MailServerModel implements Observer {
     /** The Constant LOGGER. */
     private static final Logger LOGGER = LoggerFactory.getLogger(MailServerModel.class);
 
-    /** The nb message received. */
-    private int nbMessageReceived = 0;
-
     /** The email models. */
     private final List<EmailModel> emailModels = new ArrayList<>(100);
 
@@ -49,9 +46,9 @@ public class MailServerModel implements Observer {
     }
 
     /**
-     * Delet all mails.
+     * Delete all mails.
      */
-    protected void deletAllMails() {
+    public void deleteAllMails() {
 	LOGGER.info("Received event to delete all the mails");
 	emailModels.clear();
 	rejectedMails.clear();
@@ -67,15 +64,6 @@ public class MailServerModel implements Observer {
     }
 
     /**
-     * Gets the nb message received.
-     *
-     * @return the nb message received
-     */
-    public int getNbMessageReceived() {
-	return nbMessageReceived;
-    }
-
-    /**
      * Gets the rejected mails.
      *
      * @return the rejected mails
@@ -85,9 +73,15 @@ public class MailServerModel implements Observer {
 	return rejectedMails;
     }
 
-    private void rejectedMail(final EmailModel model) {
-	LOGGER.info("A mail has been rejected : {}", model);
-	rejectedMails.add(model);
+    /**
+     * Rejects a mail.
+     *
+     * @param mail
+     *            the mail
+     */
+    public void rejectedMail(final EmailModel mail) {
+	LOGGER.info("A mail has been rejected : {}", mail);
+	rejectedMails.add(mail);
 
     }
 
@@ -97,25 +91,14 @@ public class MailServerModel implements Observer {
      * @param email
      *            the email
      */
-    protected void saveMail(final EmailModel email) {
+    public void saveMail(final EmailModel email) {
 	LOGGER.info("Has received mail : {}", email);
 	emailModels.add(email);
     }
 
-    /**
-     * Sets the nb message received.
-     *
-     * @param nbMessageReceived
-     *            the new nb message received
-     */
-    public void setNbMessageReceived(final int nbMessageReceived) {
-	this.nbMessageReceived = nbMessageReceived;
-    }
-
     @Override
     public String toString() {
-	return "MailServerModel [nbMessageReceived=" + nbMessageReceived + ", emailModels=" + emailModels
-	        + ", rejectedMails=" + rejectedMails + "]";
+	return "MailServerModel [emailModels=" + emailModels + ", rejectedMails=" + rejectedMails + "]";
     }
 
     /*
@@ -128,7 +111,7 @@ public class MailServerModel implements Observer {
 	if (arg instanceof NewMailEvent) {
 	    saveMail(((NewMailEvent) arg).getModel());
 	} else if (arg instanceof DeleteAllMailEvent) {
-	    deletAllMails();
+	    deleteAllMails();
 	} else if (arg instanceof RejectedMailEvent) {
 	    rejectedMail(((RejectedMailEvent) arg).getModel());
 	}
