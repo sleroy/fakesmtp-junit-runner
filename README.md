@@ -4,7 +4,7 @@
 
 [![Coverage Status](https://coveralls.io/repos/sleroy/fakesmtp-junit-runner/badge.svg?branch=master&service=github)](https://coveralls.io/github/sleroy/fakesmtp-junit-runner?branch=master)
 
-[![Javadocs](https://www.javadoc.io/badge/sleroy/fakesmtp-junit-runner.svg)](https://www.javadoc.io/doc/sleroy/fakesmtp-junit-runner)
+[![Javadocs](https://www.javadoc.io/badge/com.github.sleroy/fakesmtp-junit-runner.svg)](https://www.javadoc.io/doc/com.github.sleroy/fakesmtp-junit-runner)
 
 
 **Important** : Part of the source code of this library has been modified and adapted from the project of [FakeSmtp](https://github.com/Nilhcem/FakeSMTP). I want to thank him since his project inspired me the creation of that library.
