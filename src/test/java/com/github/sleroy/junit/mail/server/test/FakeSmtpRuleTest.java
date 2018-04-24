@@ -24,11 +24,16 @@ import org.junit.Test;
 
 import com.github.sleroy.fakesmtp.core.ServerConfiguration;
 import com.github.sleroy.junit.mail.server.test.FakeSmtpRule;
+import org.junit.rules.ErrorCollector;
+import org.junit.rules.ExpectedException;
 
 public class FakeSmtpRuleTest {
 
 	@Rule
 	public FakeSmtpRule smtpServer = new FakeSmtpRule(ServerConfiguration.create().port(2525).charset("UTF-8"));
+
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 
 	/**
 	 * Tests that the server is launching
@@ -38,4 +43,16 @@ public class FakeSmtpRuleTest {
 		Assert.assertTrue(smtpServer.isRunning());
 	}
 
+	@Test
+	public void forceShutdown() {
+		smtpServer.forceShutdown();
+		Assert.assertFalse(smtpServer.isRunning());
+	}
+	@Test
+	public void forceShutdown_twice_throwsFakeSmtpRuleException() {
+		smtpServer.forceShutdown();
+		Assert.assertFalse(smtpServer.isRunning());
+		thrown.expect(FakeSmtpRuleException.class);
+		smtpServer.forceShutdown();
+	}
 }
