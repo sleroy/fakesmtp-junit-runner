@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -18,8 +18,9 @@
  */
 package com.github.sleroy.junit.mail.server;
 
-import java.net.UnknownHostException;
-
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -27,7 +28,6 @@ import com.github.sleroy.fakesmtp.core.ServerConfiguration;
 import com.github.sleroy.fakesmtp.core.exception.BindPortException;
 import com.github.sleroy.fakesmtp.core.exception.InvalidHostException;
 import com.github.sleroy.fakesmtp.core.exception.InvalidPortException;
-import com.github.sleroy.junit.mail.server.MailServer;
 
 public class MailServerTest {
 
@@ -63,19 +63,27 @@ public class MailServerTest {
 
 	@Test(expected = BindPortException.class)
 	public void testStart_BindException() throws Exception {
-		// GIVEN A BASIC CONFIGURATION
-		ServerConfiguration serverConfiguration = new ServerConfiguration();
-		// WHEN I TRIGGER THE SERVER
-		try (MailServer mailServer = new MailServer(serverConfiguration);) {
-			mailServer.start();
-		} finally {
-			//
-		}
-		// THE SERVER IS MISERABILY CRASHING (PORT EXCEPTION ON 25)
-
+		// GIVEN A PORT AND A Running MailServer
+        ServerConfiguration serverConfiguration = new ServerConfiguration().port(2828);
+        try (MailServer mailServer = new MailServer(serverConfiguration)){
+            mailServer.start();
+            // WHEN I TRIGGER THE SERVER
+            startMailServer(serverConfiguration);
+            // THE SERVER IS MISERABILY CRASHING (PORT EXCEPTION ON 2828)
+        } finally {
+            //
+        }
 	}
 
-	/**
+   	private void startMailServer(ServerConfiguration serverConfiguration) throws Exception {
+        try (MailServer mailServer = new MailServer(serverConfiguration);) {
+            mailServer.start();
+        } finally {
+            //
+        }
+    	}
+
+    /**
 	 * Test start running server.
 	 *
 	 * @throws Exception
