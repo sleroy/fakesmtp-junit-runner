@@ -75,13 +75,13 @@ public class MailServerTest {
         }
 	}
 
-    private void startMailServer(ServerConfiguration serverConfiguration) throws Exception {
+   	private void startMailServer(ServerConfiguration serverConfiguration) throws Exception {
         try (MailServer mailServer = new MailServer(serverConfiguration);) {
             mailServer.start();
         } finally {
             //
         }
-    }
+    	}
 
     /**
 	 * Test start running server.
