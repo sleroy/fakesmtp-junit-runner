@@ -126,5 +126,18 @@ public class FakeSmtpRule extends ExternalResource {
 
 	return mailServer.getRelayDomains();
     }
-
+    /**
+     * Forces Shutdown. May be used in cases where you want to test for robustness
+     */
+    public void forceShutdown() {
+    if (mailServer == null) {
+        throw new FakeSmtpRuleException("already closed");
+    }
+    try {
+        mailServer.close();
+        mailServer = null;
+    }catch (Exception e) {
+        throw new FakeSmtpRuleException(e);
+    }
+    }
 }
