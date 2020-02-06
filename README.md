@@ -78,6 +78,8 @@ public class SmtpSendingClassTest {
 }
 ```
 
+If your test sender/recipient have a specific domain configured, eg: `sample@sample.com`, you need to specify it at creation time, eg: `ServerConfiguration.create().port(2525).charset("UTF-8").relayDomains("sample.com")` otherwise all emails sent will end up in the `rejectedMails` list (`smtpServer.rejectedMails()`) rather than the inbox list (`smtpServer.mailBox()`).
+
 **Step 3 :**
 
 You are ready to use it, controls the mailbox or the server state :
